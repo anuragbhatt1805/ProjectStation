@@ -68,7 +68,6 @@ class ClientManager(UserManager):
         extra_fields.setdefault('role', 'CLIENT')
         return super().create_user(username, password, **extra_fields)
 
-
 # CLIENT CLASS
 class Client(BaseUser):
     fabricator = models.ForeignKey('fabricator.Fabricator', on_delete=models.CASCADE, verbose_name='Client Company/Fabricator')
@@ -81,6 +80,29 @@ class Client(BaseUser):
     zip_code = models.CharField(max_length=10, null=True, blank=True, verbose_name='User ZipCode')
 
     objects = ClientManager()
+
+    def __str__(self):
+        return f"{self.full_name()} ({self.username})"
+
+
+# STAFF MANAGER CLASS
+class StaffManager(UserManager):
+    def create_user(self, username, password=None, **extra_fields):
+        extra_fields.setdefault('role', 'STAFF')
+        if extra_fields.get('is_superuser'):
+            extra_fields.setdefault('manager', True)
+            extra_fields.setdefault('is_staff', True)
+            extra_fields.setdefault('sales', True)
+        return super().create_user(username, password, **extra_fields)
+
+class Staff(BaseUser):
+    department = models.ForeignKey('department.Department', on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Department")
+    designation = models.CharField(max_length=50, verbose_name='Staff Designation')
+    emp_code = models.CharField(max_length=15, unique=True, verbose_name='Employee Code')
+    manager = models.BooleanField(default=False, verbose_name='Department Manager')
+    sales = models.BooleanField(default=False, verbose_name='Sales Employee')
+
+    objects = StaffManager()
 
     def __str__(self):
         return f"{self.full_name()} ({self.username})"
