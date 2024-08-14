@@ -1,19 +1,30 @@
 from django.db import models
 from uuid import uuid4
-from os import path
+from os import path, remove
 from django.conf import settings
+from core.models import Client
 
 
 def uploadStandardDesign(instance, filepath):
-    ext = path.splittext(filepath)[1]
+    ext = path.splitext(filepath)[1]
     return path.join('standardDesign', f'{uuid4()}{ext}')
+
+class DesignManager(models.Manager):
+    def delete(self, *args, **kwargs):
+        # Delete the file associated with the instance
+        try:
+            print(self.file.path)
+            remove(self.file.path)
+        except Exception as e:
+            print(e)
+        super().delete(*args, **kwargs)
 
 class StandardDesign(models.Model):
     fabricator = models.ForeignKey('Fabricator', on_delete=models.CASCADE, verbose_name='Fabricator')
     file = models.FileField(upload_to=uploadStandardDesign, verbose_name='Design File')
     added_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='Added By')
     added_on = models.DateTimeField(auto_now_add=True, verbose_name='Added On')
-    objects = models.Manager()
+    objects = DesignManager()
 
 class Fabricator(models.Model):
     name = models.CharField(max_length=150, unique=True, verbose_name="Fabricator Name")
@@ -23,6 +34,8 @@ class Fabricator(models.Model):
     state = models.CharField(max_length=50, verbose_name='State')
     country = models.CharField(max_length=50, verbose_name='Country')
     zip_code = models.CharField(max_length=20, verbose_name='Zip Code')
+    website = models.CharField(max_length=50, null=True, blank=True, verbose_name='Fabricator Website')
+    drive = models.CharField(max_length=255, null=True, blank=True, verbose_name='Drive URL')
     is_active = models.BooleanField(default=True, verbose_name='Active')
     objects = models.Manager()
 
@@ -31,9 +44,6 @@ class Fabricator(models.Model):
     
     def list_design(self):
         return StandardDesign.objects.filter(fabricator=self)
-    
-    def count_all_design(self):
-        return StandardDesign.objects.filter(fabricator=self).count()
     
     def get_design(self, pk=None):
         try:
@@ -55,3 +65,29 @@ class Fabricator(models.Model):
             return True
         except:
             return False
+    
+    def list_contact(self):
+        return Client.objects.filter(fabricator=self)
+
+    ## TODO: Test at Time of adding APIs
+    # def add_contact(self, **user):
+    #     try:
+    #         user['fabricator'] = self
+    #         user['address'] = user.get('address', self.address)
+    #         user['city'] = user.get('city', self.city)
+    #         user['state'] = user.get('state', self.state)
+    #         user['country'] = user.get('country', self.country)
+    #         user['zip_code'] = user.get('zip_code', self.zip_code)
+    #         contact = Client.objects.create_user(**user)
+    #         return contact
+    #     except:
+    #         return False
+    
+    # def remove_contact(self, pk=None):
+    #     try:
+    #         contact = Client.objects.get(fabricator=self, pk=pk)
+    #         contact.is_active = False
+    #         contact.save()
+    #         return contact
+    #     except:
+    #         return False
