@@ -50,7 +50,10 @@ class ProjectModelAdmin(admin.ModelAdmin):
     list_max_show_all = 10
     fieldsets = [
         ('Project Information', {
-            'fields' : ['name', 'status', 'stage']
+            'fields' : ['name', 'description', ]
+        }),
+        ('Project Stage & Status', {
+            'fields' : ['status', 'stage']
         }),
         ('Department Information', {
             'fields' : ['department', 'manager']
@@ -61,9 +64,16 @@ class ProjectModelAdmin(admin.ModelAdmin):
         ('Team Information', {
             'fields' : ['team',]
         }),
+        ('Additional Information', {
+            'fields' : ['tool', 'connectionDesign', 'miscDesign', 'customerDesign']
+        }),
         ('Important Dates', {
             'fields' : ['start_date', 'approval_date']
         }),
+        ('Delete', {
+            'fields':['is_bin'],
+            'classes':['collapse']
+        })
     ]
 
 admin.site.register(Project, ProjectModelAdmin)

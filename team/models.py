@@ -37,6 +37,7 @@ class Team(models.Model):
     name = models.CharField(max_length=80, verbose_name='Team Name')
     leader = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='Team Leader')
     department = models.ForeignKey('department.Department', on_delete=models.CASCADE, verbose_name='Team Department')
+    is_bin = models.BooleanField(default=False, verbose_name='Recycle Bin')
     objects = TeamManager()
 
     def __str__(self):

@@ -31,7 +31,7 @@ class FabricatorModelAdmin(admin.ModelAdmin):
 
     ordering = ['name', 'department']
     list_display = ['name', 'department', 'city', 'state', 'country', 'get_contact_count', 'get_design_count']
-    list_filter = ['department', 'city', 'state', 'country', 'zip_code', 'is_active']
+    list_filter = ['department', 'city', 'state', 'country', 'zip_code', 'is_bin']
     search_fields = ['name', 'zip_code', 'address', 'website']
     list_max_show_all = 10
     fieldsets = [
@@ -44,8 +44,9 @@ class FabricatorModelAdmin(admin.ModelAdmin):
         ('Website', {
             'fields' : ['website', 'drive']
         }),
-        ('Status', {
-            'fields' : ['is_active']
+        ('Delete', {
+            'fields':['is_bin'],
+            'classes':['collapse']
         })
     ]
 

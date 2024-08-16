@@ -12,47 +12,37 @@ def uploadProjectComment(instance, filepath):
     return path.join('project', 'comment', f'{uuid4()}{ext}')
 
 
-class ProjectCommentManager(models.Manager):
-    def delete(self, *args, **kwargs):
-        try:
-            print(self.file.path)
-            remove(self.file.path)
-        except Exception as e:
-            print(e)
-        super().delete(*args, **kwargs)
-
 class ProjectComment(models.Model):
     project = models.ForeignKey('Project', on_delete=models.CASCADE, verbose_name='Project')
-    file = models.FileField(upload_to=uploadProjectComment, verbose_name='Comment File')
+    file = models.FileField(upload_to=uploadProjectComment, blank=True, null=True, verbose_name='Comment File')
     comment = models.TextField(max_length=500, verbose_name='Comment')
     added_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='Added By')
     added_on = models.DateTimeField(auto_now_add=True, verbose_name='Added On')
-    objects = ProjectCommentManager()
+    objects = models.Manager()
 
     def __str__(self) -> str:
         return self.comment
-
-class ProjectFileManager(models.Manager):
-    def delete(self, *args, **kwargs):
-        try:
-            print(self.file.path)
-            remove(self.file.path)
-        except Exception as e:
-            print(e)
-        super().delete(*args, **kwargs)
+    
+    def delete(self):
+        if self.file:
+            self.file.delete()
+        super().delete()
 
 class ProjectFile(models.Model):
     project = models.ForeignKey('Project', on_delete=models.CASCADE, verbose_name='Project')
     file = models.FileField(upload_to=uploadProjectFile, verbose_name='Project File')
     added_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='Added By')
     added_on = models.DateTimeField(auto_now_add=True, verbose_name='Added On')
-    objects = ProjectFileManager()
-
-    def __str__(self) -> str:
-        return self.file.name
+    objects = models.Manager()
+    
+    def delete(self):
+        if self.file:
+            self.file.delete()
+        super().delete()
 
 class Project(models.Model):
     name = models.CharField(max_length=150, unique=True, verbose_name='Project Name')
+    description = models.TextField(blank=True, verbose_name='Description')
     fabricator = models.ForeignKey('fabricator.Fabricator', on_delete=models.SET_NULL, null=True, blank=True, verbose_name='Fabricator')
     department = models.ForeignKey('department.Department', on_delete=models.SET_NULL, null=True, blank=True, verbose_name='Department')
     team = models.ForeignKey('team.Team', on_delete=models.SET_NULL, null=True, blank=True, related_name='projects', verbose_name='Teams')
@@ -77,8 +67,16 @@ class Project(models.Model):
         ('REV', 'Revision'),
         ('CO#', 'Change Order')
     ], blank=True, null=True, verbose_name='Project Stage')
+    tool = models.CharField(max_length=20, default=None, choices=[
+        ('TEKLA', 'TEKLA'),
+        ('SDS-2', 'SDS-2')
+    ], blank=True, null=True, verbose_name='Tools')
+    connectionDesign = models.BooleanField(default=False, verbose_name="Connection Design")
+    miscDesign = models.BooleanField(default=False, verbose_name="Misc Design")
+    customerDesign = models.BooleanField(default=False, verbose_name="Customer Design")
     start_date = models.DateField(editable=True, verbose_name='Start Date')
     approval_date = models.DateField(editable=True, null=True, blank=True, verbose_name='Approval Date')
+    is_bin = models.BooleanField(default=False, verbose_name='Recycle Bin')
     objects = models.Manager()
 
     def __str__(self):
@@ -91,7 +89,7 @@ class Project(models.Model):
             added_by=user,
         )
         return file
-    
+
     def get_all_file(self):
         return ProjectFile.objects.filter(project=self)
     
@@ -100,7 +98,7 @@ class Project(models.Model):
         file.delete()
         return file
     
-    def add_comment(self, file, comment, user):
+    def add_comment(self, comment, user, file=None):
         comment = ProjectComment.objects.create(
             project=self,
             file=file,

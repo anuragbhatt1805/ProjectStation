@@ -28,6 +28,10 @@ class DepartmentAdminModel(admin.ModelAdmin):
     list_per_page = 10
     fieldsets =[
         ('Department', {'fields': ['name', 'manager']}),
+        ('Delete', {
+            'fields':['is_bin'],
+            'classes':['collapse']
+        })
     ]
 
 admin.site.register(Department, DepartmentAdminModel)

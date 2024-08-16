@@ -9,21 +9,17 @@ def uploadStandardDesign(instance, filepath):
     ext = path.splitext(filepath)[1]
     return path.join('standardDesign', f'{uuid4()}{ext}')
 
-class DesignManager(models.Manager):
-    def delete(self, *args, **kwargs):
-        try:
-            print(self.file.path)
-            remove(self.file.path)
-        except Exception as e:
-            print(e)
-        super().delete(*args, **kwargs)
-
 class StandardDesign(models.Model):
     fabricator = models.ForeignKey('Fabricator', on_delete=models.CASCADE, verbose_name='Fabricator')
     file = models.FileField(upload_to=uploadStandardDesign, verbose_name='Design File')
     added_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='Added By')
     added_on = models.DateTimeField(auto_now_add=True, verbose_name='Added On')
-    objects = DesignManager()
+    objects = models.Manager()
+
+    def delete(self):
+        if self.file:
+            self.file.delete()
+        super().delete()
 
 class Fabricator(models.Model):
     name = models.CharField(max_length=150, unique=True, verbose_name="Fabricator Name")
@@ -35,7 +31,7 @@ class Fabricator(models.Model):
     zip_code = models.CharField(max_length=20, verbose_name='Zip Code')
     website = models.CharField(max_length=50, null=True, blank=True, verbose_name='Fabricator Website')
     drive = models.CharField(max_length=255, null=True, blank=True, verbose_name='Drive URL')
-    is_active = models.BooleanField(default=True, verbose_name='Active')
+    is_bin = models.BooleanField(default=False, verbose_name='Recycle Bin')
     objects = models.Manager()
 
     def __str__(self):
@@ -85,7 +81,7 @@ class Fabricator(models.Model):
     # def remove_contact(self, pk=None):
     #     try:
     #         contact = Client.objects.get(fabricator=self, pk=pk)
-    #         contact.is_active = False
+    #         contact.is_bin = False
     #         contact.save()
     #         return contact
     #     except:

@@ -26,6 +26,10 @@ class TeamAdmin(admin.ModelAdmin):
         ('Department Information', {
             'fields': ('department', )
         }),
+        ('Delete', {
+            'fields':['is_bin'],
+            'classes':['collapse']
+        })
     )
 
 
