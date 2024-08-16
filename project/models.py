@@ -75,7 +75,7 @@ class Project(models.Model):
         ('BFC', 'Back from Construction'),
         ('RIFC', 'Re-issue for Construction'),
         ('REV', 'Revision'),
-        ('CO#', 'Completed')
+        ('CO#', 'Change Order')
     ], blank=True, null=True, verbose_name='Project Stage')
     start_date = models.DateField(editable=True, verbose_name='Start Date')
     approval_date = models.DateField(editable=True, null=True, blank=True, verbose_name='Approval Date')
@@ -83,3 +83,36 @@ class Project(models.Model):
 
     def __str__(self):
         return self.name
+    
+    def add_file(self, file, user):
+        file = ProjectFile.objects.create(
+            project=self,
+            file=file,
+            added_by=user,
+        )
+        return file
+    
+    def get_all_file(self):
+        return ProjectFile.objects.filter(project=self)
+    
+    def delete_file(self, file):
+        file = ProjectFile.objects.get(pk=file)
+        file.delete()
+        return file
+    
+    def add_comment(self, file, comment, user):
+        comment = ProjectComment.objects.create(
+            project=self,
+            file=file,
+            comment=comment,
+            added_by=user,
+        )
+        return comment
+    
+    def get_all_comment(self):
+        return ProjectComment.objects.filter(project=self)
+    
+    def delete_comment(self, comment):
+        comment = ProjectComment.objects.get(pk=comment)
+        comment.delete()
+        return comment

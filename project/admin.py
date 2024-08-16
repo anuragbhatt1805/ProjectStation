@@ -39,9 +39,14 @@ class ProjectFileInline(admin.TabularInline):
 
 class ProjectModelAdmin(admin.ModelAdmin):
     inlines = [ProjectCommentInline, ProjectFileInline]
-    list_display = ['name', 'fabricator', 'department', 'team', 'manager', 'status']
-    list_filter = ['fabricator', 'department', 'team', 'manager', 'status']
-    search_fields = ['name', 'fabricator', 'department', 'team', 'manager', 'status']
+
+    def get_file_count(self, obj):
+        return obj.get_all_file().count()
+    get_file_count.short_description = 'File Attached'
+
+    list_display = ['name', 'fabricator', 'department', 'team', 'manager', 'status', 'stage', 'get_file_count']
+    list_filter = ['fabricator', 'department', 'team', 'manager', 'status', 'stage']
+    search_fields = ['name', 'fabricator', 'department', 'team', 'manager', 'status', 'stage    ']
     list_max_show_all = 10
     fieldsets = [
         ('Project Information', {
