@@ -3,6 +3,7 @@ from django.conf import settings
 
 class Department(models.Model):
     name = models.CharField(max_length=50, unique=True, verbose_name='Department Name')
+    manager = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='Department Manger', related_name='Department_Manager')
     objects = models.Manager()
 
     def __str__(self):

@@ -11,7 +11,6 @@ def uploadStandardDesign(instance, filepath):
 
 class DesignManager(models.Manager):
     def delete(self, *args, **kwargs):
-        # Delete the file associated with the instance
         try:
             print(self.file.path)
             remove(self.file.path)

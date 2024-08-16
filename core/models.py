@@ -96,10 +96,10 @@ class StaffManager(UserManager):
         return super().create_user(username, password, **extra_fields)
 
 class Staff(BaseUser):
-    department = models.ForeignKey('department.Department', on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Department")
+    department = models.ForeignKey('department.Department', on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Department", related_name='Staff_Department')
     designation = models.CharField(max_length=50, verbose_name='Staff Designation')
     emp_code = models.CharField(max_length=15, unique=True, verbose_name='Employee Code')
-    manager = models.BooleanField(default=False, verbose_name='Department Manager')
+    manager = models.BooleanField(default=False, verbose_name='Project Manager')
     sales = models.BooleanField(default=False, verbose_name='Sales Employee')
 
     objects = StaffManager()

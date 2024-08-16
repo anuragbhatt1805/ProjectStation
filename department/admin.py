@@ -18,7 +18,7 @@ class DepartmentAdminModel(admin.ModelAdmin):
         return Team.objects.filter(department=obj).count()
     get_team_count.short_description = 'No. of Teams'
 
-    list_display = ['name', 
+    list_display = ['name', 'manager',
             'get_fab_count',
             'get_team_count',
             'get_staff_count']
@@ -27,7 +27,7 @@ class DepartmentAdminModel(admin.ModelAdmin):
     ordering = ['name']
     list_per_page = 10
     fieldsets =[
-        ('Department', {'fields': ['name']}),
+        ('Department', {'fields': ['name', 'manager']}),
     ]
 
 admin.site.register(Department, DepartmentAdminModel)
