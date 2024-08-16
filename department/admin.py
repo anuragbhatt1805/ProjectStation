@@ -1,6 +1,7 @@
 from django.contrib import admin
 from department.models import Department
 from fabricator.models import Fabricator
+from team.models import Team
 from core.models import Staff
 
 
@@ -13,13 +14,13 @@ class DepartmentAdminModel(admin.ModelAdmin):
         return Staff.objects.filter(department=obj).count()
     get_staff_count.short_description = 'No. of Staffs'
 
-    # def get_team_count(self, obj):
-    #     return Team.objects.filter(department=obj).count()
-    # get_team_count.short_description = 'No. of Teams'
+    def get_team_count(self, obj):
+        return Team.objects.filter(department=obj).count()
+    get_team_count.short_description = 'No. of Teams'
 
     list_display = ['name', 
             'get_fab_count',
-            # 'get_team_count',
+            'get_team_count',
             'get_staff_count']
     search_fields = ['name']
     list_filter = ['name']

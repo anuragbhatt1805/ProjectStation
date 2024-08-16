@@ -1,6 +1,5 @@
 from typing import Any
 from django.contrib import admin
-from django.http import HttpRequest
 from fabricator.models import Fabricator, StandardDesign
 
 class StandardDesignInline(admin.TabularInline):
