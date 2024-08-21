@@ -65,8 +65,12 @@ class ClientUserForm(forms.ModelForm):
         if not self.instance.pk:  # instance is None when adding a new object
             self.fields['role'].initial = 'CLIENT'
 
-class ClientUserModel(BaseUserModel):
+class ClientUserModel(BaseUserAdmin):
     form = ClientUserForm
+
+    def get_full_name(self, obj):
+        return obj.full_name()
+    get_full_name.short_description = 'Full Name'
 
     list_display = ['username', 'get_full_name', 'fabricator', 'phone', 'email', 'is_active']
     search_fields = ['username', 'fabricator', 'f_name', 'm_name', 'l_name', 'phone']
@@ -127,7 +131,6 @@ class ClientUserModel(BaseUserModel):
             obj.role = 'CLIENT'
         super().save_model(request, obj, form, change)
 
-
 class StaffUserForm(forms.ModelForm):
     class Meta:
         model = Staff
@@ -138,8 +141,12 @@ class StaffUserForm(forms.ModelForm):
         if not self.instance.pk:  # instance is None when adding a new object
             self.fields['role'].initial = 'STAFF'
 
-class StaffUserModel(BaseUserModel):
+class StaffUserModel(BaseUserAdmin):
     form = StaffUserForm
+
+    def get_full_name(self, obj):
+        return obj.full_name()
+    get_full_name.short_description = 'Full Name'
 
     list_display = ['username', 'get_full_name', 'department', 'phone', 'email', 'is_active']
     search_fields = ['username', 'department', 'f_name', 'm_name', 'l_name', 'phone']

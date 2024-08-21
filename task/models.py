@@ -18,6 +18,7 @@ class TaskComment(models.Model):
     comment = models.TextField(max_length=500, verbose_name='Comment')
     added_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='Added By')
     added_on = models.DateTimeField(auto_now_add=True, verbose_name='Added On')
+    tags = models.ManyToManyField('tag.Tag', blank=True, verbose_name='Tags')
     objects = models.Manager()
 
     def __str__(self) -> str:

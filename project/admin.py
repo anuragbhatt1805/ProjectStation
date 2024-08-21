@@ -9,7 +9,7 @@ class ProjectCommentInline(admin.TabularInline):
     model = ProjectComment
     extra = 0
     readonly_fields = ['added_by', 'added_on']
-    fields = ['comment', 'file', 'added_by', 'added_on']
+    fields = ['comment', 'file', 'tags', 'added_by', 'added_on']
     
     def get_readonly_fields(self, request, obj=None):
         if obj:

@@ -29,14 +29,14 @@ class FabricatorModelAdmin(admin.ModelAdmin):
 
     inlines = [StandardDesignInline,]
 
-    ordering = ['name', 'department']
-    list_display = ['name', 'department', 'city', 'state', 'country', 'get_contact_count', 'get_design_count']
-    list_filter = ['department', 'city', 'state', 'country', 'zip_code', 'is_bin']
+    ordering = ['name', ]
+    list_display = ['name',   'city', 'state', 'country', 'get_contact_count', 'get_design_count']
+    list_filter = [  'city', 'state', 'country', 'zip_code', 'is_bin']
     search_fields = ['name', 'zip_code', 'address', 'website']
     list_max_show_all = 10
     fieldsets = [
         ('Fabricator', {
-            'fields' : ['name', 'department']
+            'fields' : ['name',  ]
         }),
         ('Location', {
             'fields' : ['address', 'city', 'state', 'country', 'zip_code']

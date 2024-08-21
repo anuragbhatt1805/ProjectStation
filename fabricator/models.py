@@ -23,7 +23,7 @@ class StandardDesign(models.Model):
 
 class Fabricator(models.Model):
     name = models.CharField(max_length=150, unique=True, verbose_name="Fabricator Name")
-    department = models.ForeignKey('department.Department', on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Department")
+    # department = models.ForeignKey('department.Department', on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Department")
     address = models.CharField(max_length=250, null=True, blank=True, verbose_name='Billing Address')
     city = models.CharField(max_length=50, verbose_name='City')
     state = models.CharField(max_length=50, verbose_name='State')
