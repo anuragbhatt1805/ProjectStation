@@ -159,7 +159,7 @@ class StaffUserModel(BaseUserAdmin):
             'classes': ['wide']
         }),
         ('User Department Details', {
-            'fields':['department', 'designation', 'manager', 'sales'],
+            'fields':['emp_code', 'department', 'designation', 'manager', 'sales'],
             'classes':['wide']
         }),
         ('Contact Information', {
@@ -184,8 +184,8 @@ class StaffUserModel(BaseUserAdmin):
             'fields': ['username', 'f_name', 'm_name', 'l_name'],
             'classes': ['wide']
         }),
-        ('User Fabricator Details', {
-            'fields':['department', 'designation', 'manager', 'sales'],
+        ('User Department Details', {
+            'fields':['emp_code', 'department', 'designation', 'manager', 'sales'],
             'classes':['wide']
         }),
         ('Contact Information', {

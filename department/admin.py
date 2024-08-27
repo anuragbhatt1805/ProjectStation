@@ -6,9 +6,9 @@ from core.models import Staff
 
 
 class DepartmentAdminModel(admin.ModelAdmin):
-    def get_fab_count(self, obj):
-        return Fabricator.objects.filter(department=obj).count()
-    get_fab_count.short_description = 'No. of Fabricators'
+    # def get_fab_count(self, obj):
+    #     return Fabricator.objects.filter(department=obj).count()
+    # get_fab_count.short_description = 'No. of Fabricators'
 
     def get_staff_count(self, obj):
         return Staff.objects.filter(department=obj).count()
@@ -19,7 +19,7 @@ class DepartmentAdminModel(admin.ModelAdmin):
     get_team_count.short_description = 'No. of Teams'
 
     list_display = ['name', 'manager',
-            'get_fab_count',
+            # 'get_fab_count',
             'get_team_count',
             'get_staff_count']
     search_fields = ['name']

@@ -15,7 +15,11 @@ class TeamAdmin(admin.ModelAdmin):
         return obj.get_members_count()
     get_member_count.short_description = 'No of Team Members'
 
-    list_display = ('name', 'department', 'leader', 'get_member_count')
+    def get_name(self, obj):
+        return obj.leader.full_name()
+    get_name.short_description = 'Team Leader'
+
+    list_display = ('name', 'department', 'get_name', 'get_member_count')
     list_filter = ('department__name', 'leader')
     search_fields = ('name', 'department', 'leader')
     ordering = ['name']
