@@ -115,3 +115,17 @@ class Project(models.Model):
         comment = ProjectComment.objects.get(pk=comment)
         comment.delete()
         return comment
+
+class Feedback(models.Model):
+    project = models.ForeignKey('project.Project', on_delete=models.CASCADE, verbose_name='Project')
+    client = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='Client')
+    rating = models.IntegerField(choices=[
+        (1, '1'),
+        (2, '2'),
+        (3, '3'),
+        (4, '4'),
+        (5, '5'),
+    ], default=3, verbose_name='Rating')
+    feedback = models.TextField(max_length=500, verbose_name='Feedback')
+    added_on = models.DateTimeField(auto_now_add=True, verbose_name='Added On')
+    objects = models.Manager()

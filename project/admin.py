@@ -2,7 +2,8 @@ from django.contrib import admin
 from project.models import (
     Project,
     ProjectComment,
-    ProjectFile
+    ProjectFile,
+    Feedback
 )
 
 class ProjectCommentInline(admin.TabularInline):
@@ -76,4 +77,30 @@ class ProjectModelAdmin(admin.ModelAdmin):
         })
     ]
 
+class FeedbackModelAdmin(admin.ModelAdmin):
+    def get_project_name(self, obj):
+        return obj.project.name
+    get_project_name.short_description = 'Project Name'
+
+    def get_employee_name(self, obj):
+        return obj.client.full_name()
+    get_employee_name.short_description = 'Client Name'
+
+    list_display = ['get_project_name', 'get_employee_name', 'rating', 'feedback']
+    list_filter = ['project__name', 'project__fabricator', 'rating']
+    search_fields = ['project', 'feedback']
+    ordering = ['project', 'rating']
+    fieldsets = [
+        ('Project Information', {
+            'fields' : ['project',]
+        }),
+        ('Client Information', {
+            'fields' : ['client']
+        }),
+        ('Feedback Information', {
+            'fields' : ['feedback', 'rating']
+        }),
+    ]
+
 admin.site.register(Project, ProjectModelAdmin)
+admin.site.register(Feedback, FeedbackModelAdmin)
