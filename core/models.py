@@ -89,9 +89,9 @@ class Client(BaseUser):
 class StaffManager(UserManager):
     def create_user(self, username, password=None, **extra_fields):
         extra_fields.setdefault('role', 'STAFF')
+        extra_fields.setdefault('is_staff', True)
         if extra_fields.get('is_superuser'):
             extra_fields.setdefault('manager', True)
-            extra_fields.setdefault('is_staff', True)
             extra_fields.setdefault('sales', True)
         return super().create_user(username, password, **extra_fields)
 
