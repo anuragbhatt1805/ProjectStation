@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.http import JsonResponse
 from drf_spectacular.views import (
     SpectacularAPIView,
     SpectacularSwaggerView,
@@ -34,6 +35,7 @@ urlpatterns = [
     path('api/schema/redoc/',
          SpectacularRedocView.as_view(url_name='api-schema'),
          name='redoc'),
+    path('api/v2/ping/', lambda request: JsonResponse({'connection': True})),
     path('api/v2/user/', include('core.urls')),
 ]
 
