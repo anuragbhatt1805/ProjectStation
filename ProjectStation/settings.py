@@ -53,7 +53,8 @@ INSTALLED_APPS = [
     'project',
     'task',
     'record',
-    'tag'
+    'tag',
+    'vendor',
 ]
 
 MIDDLEWARE = [

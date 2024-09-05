@@ -106,3 +106,17 @@ class Staff(BaseUser):
 
     def __str__(self):
         return f"{self.full_name()} ({self.username})"
+
+class VendorUserManager(UserManager):
+    def create_user(self, username, password=None, **extra_fields):
+        extra_fields.setdefault('role', 'VENDOR')
+        return super().create_user(username, password, **extra_fields)
+
+class VendorUser(BaseUser):
+    vendor = models.ForeignKey('vendor.Vendor', on_delete=models.CASCADE, verbose_name='Vendor Company')
+    title = models.CharField(max_length=30, verbose_name='User Designation')
+    contactPoint = models.BooleanField(default=False, verbose_name='Point of contact')
+    objects = VendorUserManager()
+
+    def __str__(self):
+        return f"{self.full_name()} ({self.username})"

@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django import forms
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from core.models import Staff, Client, BaseUser
+from core.models import Staff, Client, VendorUser, BaseUser
 
 class BaseUserModel(BaseUserAdmin):
     def get_full_name(self, obj):
@@ -207,7 +207,83 @@ class StaffUserModel(BaseUserAdmin):
             obj.role = 'STAFF'
         super().save_model(request, obj, form, change)
 
+class VendorUserForm(forms.ModelForm):
+    class Meta:
+        model = VendorUser
+        fields = '__all__'
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if not self.instance.pk:  # instance is None when adding a new object
+            self.fields['role'].initial = 'VENDOR'
+
+class VendorUserModel(BaseUserAdmin):
+    form = VendorUserForm
+
+    def get_full_name(self, obj):
+        return obj.full_name()
+    get_full_name.short_description = 'Full Name'
+
+    list_display = ['username', 'get_full_name', 'vendor', 'phone', 'email', 'is_active']
+    search_fields = ['username', 'f_name', 'm_name', 'l_name', 'phone', 'email', 'vendor', 'title']
+    list_filter = ['is_active', 'vendor__name']
+    readonly_fields = ['last_login', 'role']
+    list_max_show_all = 10
+    fieldsets = [
+        ('User Information', {
+            'fields': ['username', 'f_name', 'm_name', 'l_name'],
+            'classes': ['wide']
+        }),
+        ('Vendor Information', {
+            'fields': ['vendor', 'title'],
+            'classes': ['wide']
+        }),
+        ('Contact Information', {
+            'fields': ['phone', 'email'],
+            'classes': ['wide']
+        }),
+        ('Role Information', {
+            'fields': ['role', 'is_active', 'contactPoint'],
+            'classes' : ['wide']
+        }),
+        ('Important Dates', {
+            'fields': ['last_login',],
+            'classes': ['collapse']
+        }),
+        ('Security', {
+            'fields': ['password'],
+            'classes': ['collapse']
+        })
+    ]
+    add_fieldsets = [
+        ('User Information', {
+            'fields': ['username', 'f_name', 'm_name', 'l_name'],
+            'classes': ['wide']
+        }),
+        ('Vendor Information', {
+            'fields': ['vendor', 'title'],
+            'classes': ['wide']
+        }),
+        ('Contact Information', {
+            'fields': ['phone', 'email'],
+            'classes': ['wide']
+        }),
+        ('Role Information', {
+            'fields': ['role', 'is_active', 'contactPoint'],
+            'classes' : ['wide']
+        }),
+        ('Security', {
+            'fields': ['password1', 'password2'],
+            'classes': ['wide']
+        })
+    ]
+
+    def save_model(self, request, obj, form, change):
+        if not obj.pk:  # if the object is being created
+            obj.role = 'VENDOR'
+        super().save_model(request, obj, form, change)
 
 admin.site.register(Staff, StaffUserModel)
 admin.site.register(Client, ClientUserModel)
 admin.site.register(BaseUser, BaseUserModel)
+admin.site.register(VendorUser, VendorUserModel)
