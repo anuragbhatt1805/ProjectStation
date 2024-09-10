@@ -37,6 +37,7 @@ urlpatterns = [
          name='redoc'),
     path('api/v2/ping/', lambda request: JsonResponse({'connection': True})),
     path('api/v2/user/', include('core.urls')),
+    path('api/v2/fabricator/', include('fabricator.urls')),
 ]
 
 if settings.DEBUG:

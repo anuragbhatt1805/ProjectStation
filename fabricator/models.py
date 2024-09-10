@@ -65,24 +65,24 @@ class Fabricator(models.Model):
         return Client.objects.filter(fabricator=self)
 
     ## TODO: Test at Time of adding APIs
-    # def add_contact(self, **user):
-    #     try:
-    #         user['fabricator'] = self
-    #         user['address'] = user.get('address', self.address)
-    #         user['city'] = user.get('city', self.city)
-    #         user['state'] = user.get('state', self.state)
-    #         user['country'] = user.get('country', self.country)
-    #         user['zip_code'] = user.get('zip_code', self.zip_code)
-    #         contact = Client.objects.create_user(**user)
-    #         return contact
-    #     except:
-    #         return False
+    def add_contact(self, **user):
+        try:
+            user['fabricator'] = self
+            user['address'] = user.get('address', self.address)
+            user['city'] = user.get('city', self.city)
+            user['state'] = user.get('state', self.state)
+            user['country'] = user.get('country', self.country)
+            user['zip_code'] = user.get('zip_code', self.zip_code)
+            contact = Client.objects.create_user(**user)
+            return contact
+        except:
+            return False
     
-    # def remove_contact(self, pk=None):
-    #     try:
-    #         contact = Client.objects.get(fabricator=self, pk=pk)
-    #         contact.is_bin = False
-    #         contact.save()
-    #         return contact
-    #     except:
-    #         return False
+    def remove_contact(self, pk=None):
+        try:
+            contact = Client.objects.get(fabricator=self, pk=pk)
+            contact.is_bin = False
+            contact.save()
+            return contact
+        except:
+            return False

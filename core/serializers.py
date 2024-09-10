@@ -60,6 +60,9 @@ class ClientSerializer(UserSerializer):
                 'read_only': True,
                 'write_only': False,
                 'required': False
+            },
+            'last_login':{
+                'read_only':True
             }
         }
 
@@ -94,8 +97,17 @@ class StaffSerializer(UserSerializer):
                 'read_only': True,
                 'write_only': False,
                 'required': False
+            },
+            'last_login':{
+                'read_only':True
             }
         }
+
+    # def to_representation(self, instance):
+    #     data = super().to_representation(instance)
+    #     print(data)
+    #     data['department'] = data['department'].name
+    #     return data
 
     def create(self, validated_data):
         user = Staff.objects.create_user(**validated_data)
@@ -128,6 +140,9 @@ class VendorUserSerializer(UserSerializer):
                 'read_only': True,
                 'write_only': False,
                 'required': False
+            },
+            'last_login':{
+                'read_only':True
             }
         }
 

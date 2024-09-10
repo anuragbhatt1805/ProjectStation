@@ -29,7 +29,7 @@ class ClientModelViewSet(viewsets.ModelViewSet):
     authentication_classes = [TokenAuthentication, ]
     permission_classes = (IsAuthenticated, UpdateProfilePermission)
     filter_backends = [filters.SearchFilter, ]
-    search_fields = ['fabricator', 'username', 'email', 'f_name', 'l_name', 'phone']
+    search_fields = ['username', 'email', 'f_name', 'm_name', 'l_name', 'phone']
     
 
 class StaffModelViewSet(viewsets.ModelViewSet):
@@ -38,7 +38,11 @@ class StaffModelViewSet(viewsets.ModelViewSet):
     authentication_classes = [TokenAuthentication, ]
     permission_classes = (IsAuthenticated, UpdateProfilePermission)
     filter_backends = [filters.SearchFilter, ]
-    search_fields = ['department', 'username', 'email', 'f_name', 'l_name', 'phone']
+    search_fields = ['username', 'email', 'f_name', 'm_name', 'l_name', 'phone']
+
+    def create(self, serializer):
+        print(serializer.data)
+        return super().create(serializer)
 
 class VendorUserModelViewSet(viewsets.ModelViewSet):
     serializer_class = VendorUserSerializer
@@ -46,7 +50,7 @@ class VendorUserModelViewSet(viewsets.ModelViewSet):
     authentication_classes = [TokenAuthentication, ]
     permission_classes = (IsAuthenticated, UpdateProfilePermission)
     filter_backends = [filters.SearchFilter, ]
-    search_fields = ['vendor', 'username', 'email', 'f_name', 'l_name', 'phone']
+    search_fields = ['username', 'email', 'f_name', 'm_name', 'l_name', 'phone']
 
 
 class UserModelViewSet(viewsets.ModelViewSet):
