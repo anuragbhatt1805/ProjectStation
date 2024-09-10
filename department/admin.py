@@ -23,7 +23,7 @@ class DepartmentAdminModel(admin.ModelAdmin):
             'get_team_count',
             'get_staff_count']
     search_fields = ['name']
-    list_filter = ['name']
+    # list_filter = ['name']
     ordering = ['name']
     list_per_page = 10
     fieldsets =[
