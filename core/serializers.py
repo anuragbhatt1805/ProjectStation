@@ -42,7 +42,7 @@ class UserSerializer(serializers.ModelSerializer):
         return user
 
 
-class ClientSerializer(UserSerializer):
+class ClientSerializer(serializers.ModelSerializer):
     class Meta:
         model = Client
         fields = '__all__'
@@ -79,7 +79,7 @@ class ClientSerializer(UserSerializer):
         return user
 
 
-class StaffSerializer(UserSerializer):
+class StaffSerializer(serializers.ModelSerializer):
     class Meta:
         model = Staff
         fields = '__all__'
@@ -110,6 +110,7 @@ class StaffSerializer(UserSerializer):
     #     return data
 
     def create(self, validated_data):
+        
         user = Staff.objects.create_user(**validated_data)
         return user
     
@@ -122,7 +123,7 @@ class StaffSerializer(UserSerializer):
         return user
 
 
-class VendorUserSerializer(UserSerializer):
+class VendorUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = VendorUser
         fields = '__all__'

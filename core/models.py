@@ -10,7 +10,7 @@ class UserManager(BaseUserManager):
     def create_user(self, username, password=None, **extra_fields):
         if not username:
             raise ValueError('The username must be set')
-        email = self.normalize_email(extra_fields.get('email', None))
+        email = self.normalize_email(None if extra_fields.get('email') in [None, '', ['']] else extra_fields.get('email', None))
         extra_fields['email'] = email
         user = self.model(username=username, **extra_fields)
         user.set_password(password)

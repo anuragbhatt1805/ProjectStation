@@ -62,6 +62,6 @@ class FabricatorModelViewSet(viewsets.ModelViewSet):
         else:
             serializer = ClientSerializer(data=request.data)
             if serializer.is_valid():
-                client = fabricator.add_contact(**request.data)
+                client = fabricator.add_contact(**serializer.data)
                 return Response(ClientSerializer(client).data, status=status.HTTP_201_CREATED)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

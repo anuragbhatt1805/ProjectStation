@@ -64,20 +64,19 @@ class Fabricator(models.Model):
     def list_contact(self):
         return Client.objects.filter(fabricator=self)
 
-    ## TODO: Test at Time of adding APIs
     def add_contact(self, **user):
         try:
             user['fabricator'] = self
             user['address'] = user.get('address', self.address)
-            user['city'] = user.get('city', self.city)
-            user['state'] = user.get('state', self.state)
-            user['country'] = user.get('country', self.country)
-            user['zip_code'] = user.get('zip_code', self.zip_code)
+            user['city'] = user.get('city') if user.get('city') not in [None, '', ['']] else self.city
+            user['state'] = user.get('state') if user.get('state') not in [None, '', ['']] else self.state
+            user['country'] = user.get('country') if user.get('country') not in [None, '', ['']] else self.country
+            user['zip_code'] = user.get('zip_code') if user.get('zip_code') not in [None, '', ['']] else self.zip_code
             contact = Client.objects.create_user(**user)
             return contact
-        except:
-            return False
-    
+        except Exception as e:
+            print(f"Error creating contact: {e}")
+            raise e  
     def remove_contact(self, pk=None):
         try:
             contact = Client.objects.get(fabricator=self, pk=pk)

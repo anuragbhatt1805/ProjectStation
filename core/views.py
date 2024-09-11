@@ -41,7 +41,6 @@ class StaffModelViewSet(viewsets.ModelViewSet):
     search_fields = ['username', 'email', 'f_name', 'm_name', 'l_name', 'phone']
 
     def create(self, serializer):
-        print(serializer.data)
         return super().create(serializer)
 
 class VendorUserModelViewSet(viewsets.ModelViewSet):
