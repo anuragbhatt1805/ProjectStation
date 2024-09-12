@@ -11,8 +11,14 @@ class Department(models.Model):
     def __str__(self):
         return self.name
 
-    def get_staffs(self):
+    def list_staff(self):
         return Staff.objects.filter(department=self)
+    
+    def get_staff(self, pk=None):
+        try:
+            return Staff.objects.get(department=self, pk=pk)
+        except:
+            return False
 
     def add_staff(self, **user):
         try:

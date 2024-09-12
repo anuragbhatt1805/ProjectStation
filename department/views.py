@@ -27,11 +27,16 @@ class DepartmentViewSet(viewsets.ModelViewSet):
     def staffs(self, request, pk=None, id=None):
         department = self.get_object()
         if request.method == 'GET':
+            if id:
+                staff = department.get_staff(id)
+                if staff:
+                    return Response(StaffSerializer(staff).data)
+                return Response({'message': 'Staff not found.'}, status=status.HTTP_404_NOT_FOUND)
             staffs = department.list_staff()
             serializer = StaffSerializer(staffs, many=True)
             return Response(serializer.data)
         elif request.method == 'DELETE':
-            staff = department.delete_staff(id)
+            staff = department.remove_staff(id)
             if staff:
                 return Response({'message': 'Staff deleted successfully.'}, status=status.HTTP_204_NO_CONTENT)
             return Response({'message': 'Staff not found.'}, status=status.HTTP_404_NOT_FOUND)

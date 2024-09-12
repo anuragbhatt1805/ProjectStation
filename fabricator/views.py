@@ -32,11 +32,16 @@ class FabricatorModelViewSet(viewsets.ModelViewSet):
     def designs(self, request, pk=None, id=None):
         fabricator = self.get_object()
         if request.method == 'GET':
+            if id:
+                design = fabricator.get_design(id)
+                if design:
+                    return Response(StandardDesignSerializer(design).data)
+                return Response({'message': 'Design not found.'}, status=status.HTTP_404_NOT_FOUND)
             designs = fabricator.list_design()
             serializer = StandardDesignSerializer(designs, many=True)
             return Response(serializer.data)
         elif request.method == 'DELETE':
-            design = fabricator.delete_design(id)
+            design = fabricator.remove_design(id)
             if design:
                 return Response({'message': 'Design deleted successfully.'}, status=status.HTTP_204_NO_CONTENT)
             return Response({'message': 'Design not found.'}, status=status.HTTP_404_NOT_FOUND)
@@ -51,6 +56,11 @@ class FabricatorModelViewSet(viewsets.ModelViewSet):
     def clients(self, request, pk=None, id=None):
         fabricator = self.get_object()
         if request.method == 'GET':
+            if id:
+                client = fabricator.get_contact(id)
+                if client:
+                    return Response(ClientSerializer(client).data)
+                return Response({'message': 'Client not found.'}, status=status.HTTP_404_NOT_FOUND)
             clients = fabricator.list_contact()
             serializer = ClientSerializer(clients, many=True)
             return Response(serializer.data)

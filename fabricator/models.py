@@ -53,7 +53,7 @@ class Fabricator(models.Model):
         except:
             return False
     
-    def delete_design(self, pk):
+    def remove_design(self, pk):
         try:
             design = StandardDesign.objects.get(fabricator=self, pk=pk)
             design.delete()
@@ -63,6 +63,12 @@ class Fabricator(models.Model):
     
     def list_contact(self):
         return Client.objects.filter(fabricator=self)
+    
+    def get_contact(self, pk=None):
+        try:
+            return Client.objects.get(fabricator=self, pk=pk)
+        except:
+            return False
 
     def add_contact(self, **user):
         try:
