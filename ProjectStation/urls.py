@@ -38,6 +38,7 @@ urlpatterns = [
     path('api/v2/ping/', lambda request: JsonResponse({'connection': True})),
     path('api/v2/user/', include('core.urls')),
     path('api/v2/fabricator/', include('fabricator.urls')),
+    path('api/v2/department/', include('department.urls')),
 ]
 
 if settings.DEBUG:

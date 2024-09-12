@@ -23,7 +23,7 @@ class DepartmentViewSet(viewsets.ModelViewSet):
             return StaffSerializer
         return super().get_serializer_class()
 
-    @action(detail=True, methods=['get', 'post', 'delete'], url_path='staffs/(?P<id>[^/.]+)')
+    @action(detail=True, methods=['get', 'post', 'delete'], url_path='staffs(?:/(?P<id>[^/.]+))?')
     def staffs(self, request, pk=None, id=None):
         department = self.get_object()
         if request.method == 'GET':

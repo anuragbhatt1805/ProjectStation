@@ -28,7 +28,7 @@ class FabricatorModelViewSet(viewsets.ModelViewSet):
             return ClientSerializer
         return super().get_serializer_class()
 
-    @action(detail=True, methods=['get', 'post', 'delete'], url_path='designs/(?P<id>[^/.]+)')
+    @action(detail=True, methods=['get', 'post', 'delete'], url_path='designs(?:/(?P<id>[^/.]+))?')
     def designs(self, request, pk=None, id=None):
         fabricator = self.get_object()
         if request.method == 'GET':
@@ -52,7 +52,7 @@ class FabricatorModelViewSet(viewsets.ModelViewSet):
                 return Response(StandardDesignSerializer(design).data, status=status.HTTP_201_CREATED)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    @action(detail=True, methods=['get', 'post', 'delete'], url_path='clients/(?P<id>[^/.]+)')
+    @action(detail=True, methods=['get', 'post', 'delete'], url_path='clients(?:/(?P<id>[^/.]+))?')
     def clients(self, request, pk=None, id=None):
         fabricator = self.get_object()
         if request.method == 'GET':
