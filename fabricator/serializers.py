@@ -4,7 +4,14 @@ from fabricator.models import (
     StandardDesign
 )
 from core.models import Client
+from django.contrib.auth import get_user_model
 
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = get_user_model()
+        fields = ['f_name', 'm_name', 'l_name', 'username', 'email', 'phone', 'role']
+        
 class ClientSerializer(serializers.ModelSerializer):
     class Meta:
         model = Client
@@ -38,18 +45,14 @@ class StandardDesignSerializer(serializers.ModelSerializer):
         fields = '__all__'
         read_only_fields = ['id', 'fabricator', 'added_by', 'added_on']
     
-    # def to_representation(self, instance):
-    #     response = super().to_representation(instance)
-    #     response['added_by'] = instance.added_by
-    #     return response
+    def to_representation(self, instance):
+        response = super().to_representation(instance)
+        if response['added_by'] is not None:
+            response['added_by'] = UserSerializer(get_user_model().objects.get(pk=response['added_by'])).data
+        return response
 
 class FabricatorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Fabricator
         fields = '__all__'
         read_only_fields = ['id']
-    
-    # def to_representation(self, instance):
-    #     response = super().to_representation(instance)
-    #     response['designs'] = StandardDesignSerializer(instance.list_design(), many=True).data
-    #     return response

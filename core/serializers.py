@@ -6,6 +6,10 @@ from core.models import (
     Staff,
     VendorUser
 )
+from fabricator.serializers import (
+    FabricatorSerializer,
+    Fabricator
+)
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -65,6 +69,11 @@ class ClientSerializer(serializers.ModelSerializer):
                 'read_only':True
             }
         }
+
+    def to_representation(self, instance):
+        result = super().to_representation(instance)
+        result['fabricator'] = FabricatorSerializer(Fabricator.objects.get(pk=result['fabricator'])).data
+        return result
 
     def create(self, validated_data):
         user = Client.objects.create_user(**validated_data)

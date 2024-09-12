@@ -80,8 +80,7 @@ class Fabricator(models.Model):
     def remove_contact(self, pk=None):
         try:
             contact = Client.objects.get(fabricator=self, pk=pk)
-            contact.is_bin = False
-            contact.save()
+            contact.delete()
             return contact
         except:
             return False

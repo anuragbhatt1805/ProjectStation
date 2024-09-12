@@ -28,15 +28,15 @@ class FabricatorModelViewSet(viewsets.ModelViewSet):
             return ClientSerializer
         return super().get_serializer_class()
 
-    @action(detail=True, methods=['get', 'post', 'delete'])
-    def designs(self, request, pk=None):
+    @action(detail=True, methods=['get', 'post', 'delete'], url_path='designs/(?P<id>[^/.]+)')
+    def designs(self, request, pk=None, id=None):
         fabricator = self.get_object()
         if request.method == 'GET':
             designs = fabricator.list_design()
             serializer = StandardDesignSerializer(designs, many=True)
             return Response(serializer.data)
         elif request.method == 'DELETE':
-            design = fabricator.delete_design(pk)
+            design = fabricator.delete_design(id)
             if design:
                 return Response({'message': 'Design deleted successfully.'}, status=status.HTTP_204_NO_CONTENT)
             return Response({'message': 'Design not found.'}, status=status.HTTP_404_NOT_FOUND)
@@ -47,15 +47,15 @@ class FabricatorModelViewSet(viewsets.ModelViewSet):
                 return Response(StandardDesignSerializer(design).data, status=status.HTTP_201_CREATED)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    @action(detail=True, methods=['get', 'post', 'delete'])
-    def clients(self, request, pk=None):
+    @action(detail=True, methods=['get', 'post', 'delete'], url_path='clients/(?P<id>[^/.]+)')
+    def clients(self, request, pk=None, id=None):
         fabricator = self.get_object()
         if request.method == 'GET':
             clients = fabricator.list_contact()
             serializer = ClientSerializer(clients, many=True)
             return Response(serializer.data)
         elif request.method == 'DELETE':
-            client = fabricator.remove_contact(pk)
+            client = fabricator.remove_contact(id)
             if client:
                 return Response({'message': 'Client removed successfully.'}, status=status.HTTP_204_NO_CONTENT)
             return Response({'message': 'Client not found.'}, status=status.HTTP_404_NOT_FOUND)
