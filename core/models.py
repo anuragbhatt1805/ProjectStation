@@ -43,7 +43,7 @@ class BaseUser(AbstractBaseUser, PermissionsMixin):
         ('VENDOR', 'Vendor'),
     ], verbose_name='Role for User')
     is_active = models.BooleanField(default=True, verbose_name='Active User')
-    is_staff = models.BooleanField(default=False, verbose_name='WBT Employee')
+    is_staff = models.BooleanField(default=False, verbose_name='Department Manager')
     is_superuser = models.BooleanField(default=False, verbose_name='Administrator')
 
     objects = UserManager()

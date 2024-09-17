@@ -34,3 +34,9 @@ class DepartmentSerializer(serializers.ModelSerializer):
         model = Department
         fields = '__all__'
         read_only_fields = ['id']
+
+    def to_representation(self, instance):
+        response = super().to_representation(instance)
+        if response['manager'] is not None:
+            response['manager'] = StaffSerializer(Staff.objects.get(pk=instance.manager)).data
+        return response
