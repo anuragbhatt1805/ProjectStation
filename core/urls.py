@@ -5,7 +5,7 @@ from core.views import (
     ClientModelViewSet,
     StaffModelViewSet,
     VendorUserModelViewSet,
-    UserModelViewSet
+    UserModelViewSet,
 )
 
 router = DefaultRouter()
@@ -16,6 +16,6 @@ router.register('', UserModelViewSet)
 
 
 urlpatterns = [
-    path('login/', UserLoginApiView.as_view(), name='login'),
+    path('login/', UserLoginApiView.as_view(), name='login'), 
     path('', include(router.urls))
 ]

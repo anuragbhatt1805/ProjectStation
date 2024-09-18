@@ -11,6 +11,10 @@ from fabricator.serializers import (
     Fabricator
 )
 
+class ChangePasswordSerializer(serializers.Serializer):
+    old_password = serializers.CharField(required=True)
+    new_password = serializers.CharField(required=True)
+
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:

@@ -24,6 +24,7 @@ from drf_spectacular.views import (
     SpectacularSwaggerView,
     SpectacularRedocView
 )
+from core.views import ChangePassword
 
 
 urlpatterns = [
@@ -36,6 +37,7 @@ urlpatterns = [
          SpectacularRedocView.as_view(url_name='api-schema'),
          name='redoc'),
     path('api/v2/ping/', lambda request: JsonResponse({'connection': True})),
+    path('api/v2/change-password/', ChangePassword.as_view(), name='change_password'),
     path('api/v2/user/', include('core.urls')),
     path('api/v2/fabricator/', include('fabricator.urls')),
     path('api/v2/department/', include('department.urls')),

@@ -2,8 +2,10 @@ from rest_framework.response import Response
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.settings import api_settings
 from rest_framework import viewsets, filters, status
+from rest_framework.generics import GenericAPIView
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
+from django.contrib.auth import get_user_model
 from core.models import (
     BaseUser,
     Client,
@@ -14,7 +16,8 @@ from core.serializers import (
     UserSerializer,
     ClientSerializer,
     StaffSerializer,
-    VendorUserSerializer
+    VendorUserSerializer,
+    ChangePasswordSerializer
 )
 from core.permissions import UpdateProfilePermission
 
@@ -23,6 +26,23 @@ class UserLoginApiView(ObtainAuthToken):
     """Handle creating user Authentication Token"""
     renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES
 
+class ChangePassword(GenericAPIView):
+    serializer_class = ChangePasswordSerializer
+
+    def put(self, request):
+        # print(request.data)
+        password = request.data['old_password']
+        new_password = request.data['new_password']
+        
+        print(request.user)
+        obj = get_user_model().objects.get(pk=request.user.id)
+        if not obj.check_password(raw_password=password):
+            return Response({'error': 'password not match'}, status=400)
+        else:
+            obj.set_password(new_password)
+            obj.save()
+            return Response({'success': 'password changed successfully'}, status=200)
+
 class ClientModelViewSet(viewsets.ModelViewSet):
     serializer_class = ClientSerializer
     queryset = Client.objects.all()
@@ -30,7 +50,6 @@ class ClientModelViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated, UpdateProfilePermission)
     filter_backends = [filters.SearchFilter, ]
     search_fields = ['username', 'email', 'f_name', 'm_name', 'l_name', 'phone']
-    
 
 class StaffModelViewSet(viewsets.ModelViewSet):
     serializer_class = StaffSerializer
