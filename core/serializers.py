@@ -14,6 +14,7 @@ from fabricator.serializers import (
 class ChangePasswordSerializer(serializers.Serializer):
     old_password = serializers.CharField(required=True)
     new_password = serializers.CharField(required=True)
+    cnf_password = serializers.CharField(required=True)
 
 
 class UserSerializer(serializers.ModelSerializer):

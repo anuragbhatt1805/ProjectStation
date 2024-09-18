@@ -28,16 +28,21 @@ class UserLoginApiView(ObtainAuthToken):
 
 class ChangePassword(GenericAPIView):
     serializer_class = ChangePasswordSerializer
+    permission_classes = (IsAuthenticated, )
+    authentication_classes = [TokenAuthentication, ]
 
     def put(self, request):
         # print(request.data)
         password = request.data['old_password']
         new_password = request.data['new_password']
+        confirm_password = request.data['cnf_password']
+
+        if new_password!= confirm_password:
+            return Response({'error': 'new passwords do not match'}, status=400)
         
-        print(request.user)
         obj = get_user_model().objects.get(pk=request.user.id)
         if not obj.check_password(raw_password=password):
-            return Response({'error': 'password not match'}, status=400)
+            return Response({'error': 'old password is incorrect'}, status=400)
         else:
             obj.set_password(new_password)
             obj.save()
