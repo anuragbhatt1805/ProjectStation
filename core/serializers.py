@@ -1,4 +1,5 @@
 from django.utils.translation import gettext as _
+from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
 from core.models import (
     BaseUser,
@@ -13,8 +14,22 @@ from fabricator.serializers import (
 
 class ChangePasswordSerializer(serializers.Serializer):
     old_password = serializers.CharField(required=True)
-    new_password = serializers.CharField(required=True)
-    cnf_password = serializers.CharField(required=True)
+    new_password = serializers.CharField(required=True, min_length=8)
+    cnf_password = serializers.CharField(required=True, min_length=8)
+
+    def validate(self, data):
+        # Check if new_password matches cnf_password
+        if data['new_password'] != data['cnf_password']:
+            raise serializers.ValidationError(
+                {"non_field_errors": _("The new password and confirm password do not match.")}
+            )
+
+        try:
+            validate_password(data['new_password'])
+        except serializers.ValidationError as e:
+            raise serializers.ValidationError({"new_password": list(e.messages)})
+
+        return data
 
 
 class UserSerializer(serializers.ModelSerializer):

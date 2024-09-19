@@ -32,7 +32,7 @@ class BaseUserModel(BaseUserAdmin):
             'classes': ['collapse']
         }),
         ('Security', {
-            'fields': ['password'],
+            'fields': ['password', 'is_firstLogin'],
             'classes': ['collapse']
         })
     ]
@@ -99,7 +99,7 @@ class ClientUserModel(BaseUserAdmin):
             'classes': ['collapse']
         }),
         ('Security', {
-            'fields': ['password'],
+            'fields': ['password', 'is_firstLogin'],
             'classes': ['collapse']
         })
     ]
@@ -159,7 +159,7 @@ class StaffUserModel(BaseUserAdmin):
             'classes': ['wide']
         }),
         ('User Department Details', {
-            'fields':['emp_code', 'department', 'designation', 'manager', 'sales'],
+            'fields':['emp_code', 'department', 'designation', 'is_manager', 'is_sales'],
             'classes':['wide']
         }),
         ('Contact Information', {
@@ -175,7 +175,7 @@ class StaffUserModel(BaseUserAdmin):
             'classes': ['collapse']
         }),
         ('Security', {
-            'fields': ['password'],
+            'fields': ['password', 'is_firstLogin'],
             'classes': ['collapse']
         })
     ]
@@ -185,7 +185,7 @@ class StaffUserModel(BaseUserAdmin):
             'classes': ['wide']
         }),
         ('User Department Details', {
-            'fields':['emp_code', 'department', 'designation', 'manager', 'sales'],
+            'fields':['emp_code', 'department', 'designation', 'is_manager', 'is_sales'],
             'classes':['wide']
         }),
         ('Contact Information', {
@@ -251,7 +251,7 @@ class VendorUserModel(BaseUserAdmin):
             'classes': ['collapse']
         }),
         ('Security', {
-            'fields': ['password'],
+            'fields': ['password', 'is_firstLogin'],
             'classes': ['collapse']
         })
     ]

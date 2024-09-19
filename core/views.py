@@ -36,17 +36,21 @@ class ChangePassword(GenericAPIView):
         password = request.data['old_password']
         new_password = request.data['new_password']
         confirm_password = request.data['cnf_password']
-
-        if new_password!= confirm_password:
-            return Response({'error': 'new passwords do not match'}, status=400)
         
         obj = get_user_model().objects.get(pk=request.user.id)
         if not obj.check_password(raw_password=password):
-            return Response({'error': 'old password is incorrect'}, status=400)
+            print(request.data)
+            print(obj)
+            return Response({'non_field_errors': ['old password is incorrect']}, status=status.HTTP_400_BAD_REQUEST)
         else:
-            obj.set_password(new_password)
-            obj.save()
-            return Response({'success': 'password changed successfully'}, status=200)
+            check = ChangePasswordSerializer(data=request.data)
+            if check.is_valid():
+                obj.set_password(new_password)
+                obj.is_firstLogin = False
+                obj.save()
+                return Response({'success': 'password changed successfully'}, status=status.HTTP_200_OK)
+            else:
+                return Response(check.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class ClientModelViewSet(viewsets.ModelViewSet):
     serializer_class = ClientSerializer
@@ -105,7 +109,7 @@ class UserModelViewSet(viewsets.ModelViewSet):
                 return Client.objects.filter(pk=self.request.user.id)
             elif self.request.user.role == 'VENDOR':
                 return VendorUser.objects.filter(pk=self.request.user.id)
-        except:
+        except Exception as e:
             return BaseUser.objects.filter(pk=self.request.user.id)
     
     def update(self, request, *args, **kwargs):

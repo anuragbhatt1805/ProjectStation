@@ -45,6 +45,7 @@ class BaseUser(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True, verbose_name='Active User')
     is_staff = models.BooleanField(default=False, verbose_name='Department Manager')
     is_superuser = models.BooleanField(default=False, verbose_name='Administrator')
+    is_firstLogin = models.BooleanField(default=True, verbose_name='Change Password on Next Login')
 
     objects = UserManager()
 
@@ -91,16 +92,16 @@ class StaffManager(UserManager):
         extra_fields.setdefault('role', 'STAFF')
         extra_fields.setdefault('is_staff', True)
         if extra_fields.get('is_superuser'):
-            extra_fields.setdefault('manager', True)
-            extra_fields.setdefault('sales', True)
+            extra_fields.setdefault('is_manager', True)
+            extra_fields.setdefault('is_sales', True)
         return super().create_user(username, password, **extra_fields)
 
 class Staff(BaseUser):
     department = models.ForeignKey('department.Department', on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Department", related_name='Staff_Department')
     designation = models.CharField(max_length=50, verbose_name='Staff Designation')
     emp_code = models.CharField(max_length=15, unique=True, verbose_name='Employee Code')
-    manager = models.BooleanField(default=False, verbose_name='Project Manager')
-    sales = models.BooleanField(default=False, verbose_name='Sales Employee')
+    is_manager = models.BooleanField(default=False, verbose_name='Project Manager')
+    is_sales = models.BooleanField(default=False, verbose_name='Sales Employee')
 
     objects = StaffManager()
 
