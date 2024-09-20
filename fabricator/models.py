@@ -73,11 +73,13 @@ class Fabricator(models.Model):
     def add_contact(self, **user):
         try:
             user['fabricator'] = self
-            user['address'] = user.get('address', self.address)
+            user['role'] = 'CLIENT'
+            user['address'] = user.get('address') if user.get('address') not in [None, '', ['']] else self.address
             user['city'] = user.get('city') if user.get('city') not in [None, '', ['']] else self.city
             user['state'] = user.get('state') if user.get('state') not in [None, '', ['']] else self.state
             user['country'] = user.get('country') if user.get('country') not in [None, '', ['']] else self.country
             user['zip_code'] = user.get('zip_code') if user.get('zip_code') not in [None, '', ['']] else self.zip_code
+            print(user)
             contact = Client.objects.create_user(**user)
             return contact
         except Exception as e:

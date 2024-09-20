@@ -68,8 +68,6 @@ class StaffModelViewSet(viewsets.ModelViewSet):
     filter_backends = [filters.SearchFilter, ]
     search_fields = ['username', 'email', 'f_name', 'm_name', 'l_name', 'phone']
 
-    def create(self, serializer):
-        return super().create(serializer)
 
 class VendorUserModelViewSet(viewsets.ModelViewSet):
     serializer_class = VendorUserSerializer

@@ -87,6 +87,9 @@ class ClientSerializer(serializers.ModelSerializer):
             },
             'last_login':{
                 'read_only':True
+            },
+            'role': {
+                'read_only': True
             }
         }
 
@@ -96,6 +99,7 @@ class ClientSerializer(serializers.ModelSerializer):
         return result
 
     def create(self, validated_data):
+        validated_data['role'] = 'CLIENT'
         user = Client.objects.create_user(**validated_data)
         return user
     

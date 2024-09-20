@@ -49,7 +49,7 @@ class Vendor(models.Model):
         except:
             return False
         
-    def delete_design(self, pk):
+    def remove_design(self, pk):
         try:
             design = VendorDesign.objects.get(vendor=self, pk=pk)
             design.delete()
@@ -59,5 +59,20 @@ class Vendor(models.Model):
         
     def list_all_user(self):
         return VendorUser.objects.filter(vendor=self)
-        
     
+    def add_user(self, **user):
+        try:
+            user['vendor'] = self
+            vendor = VendorUser.objects.create_user(*user)
+            return vendor
+        except Exception as e:
+            print(f"Error creating contact: {e}")
+            raise e
+    
+    def  remove_user(self, pk=None):
+        try:
+            user = VendorUser.objects.get(vendor=self, pk=pk)
+            user.delete()
+            return user
+        except:
+            return False

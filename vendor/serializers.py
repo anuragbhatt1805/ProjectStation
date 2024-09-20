@@ -1,25 +1,24 @@
 from rest_framework import serializers
-from fabricator.models import (
-    Fabricator,
-    StandardDesign
-)
-from core.models import Client
 from django.contrib.auth import get_user_model
-
+from vendor.models import (
+    Vendor,
+    VendorDesign
+)
+from core.models import VendorUser
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
         fields = ['f_name', 'm_name', 'l_name', 'username', 'email', 'phone', 'role']
 
-class ClientSerializer(serializers.ModelSerializer):
+class VendorUserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Client
+        model = VendorUser
         fields = '__all__'
         extra_kwargs = {
-            'password':{
-                'write_only':True,
-                'style':{'input_type':'password'}
+            'password': {
+                'write_only': True,
+                'style': {'input_type': 'password'}
             },
             'groups': {
                 'read_only': True,
@@ -31,7 +30,7 @@ class ClientSerializer(serializers.ModelSerializer):
                 'write_only': False,
                 'required': False
             },
-            'fabricator': {
+            'vendor': {
                 'read_only': True,
             },
             'last_login':{
@@ -39,20 +38,20 @@ class ClientSerializer(serializers.ModelSerializer):
             }
         }
 
-class StandardDesignSerializer(serializers.ModelSerializer):
+class VendorDesignSerializer(serializers.ModelSerializer):
     class Meta:
-        model = StandardDesign
+        model = VendorDesign
         fields = '__all__'
-        read_only_fields = ['id', 'fabricator', 'added_by', 'added_on']
+        read_only_fields = ['id', 'vendor', 'added_by', 'added_on']
     
     def to_representation(self, instance):
         response = super().to_representation(instance)
         if response['added_by'] is not None:
             response['added_by'] = UserSerializer(get_user_model().objects.get(pk=response['added_by'])).data
         return response
-
-class FabricatorSerializer(serializers.ModelSerializer):
+    
+class VendorSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Fabricator
+        model = Vendor
         fields = '__all__'
         read_only_fields = ['id']
