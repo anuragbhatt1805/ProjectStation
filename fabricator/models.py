@@ -79,7 +79,6 @@ class Fabricator(models.Model):
             user['state'] = user.get('state') if user.get('state') not in [None, '', ['']] else self.state
             user['country'] = user.get('country') if user.get('country') not in [None, '', ['']] else self.country
             user['zip_code'] = user.get('zip_code') if user.get('zip_code') not in [None, '', ['']] else self.zip_code
-            print(user)
             contact = Client.objects.create_user(**user)
             return contact
         except Exception as e:

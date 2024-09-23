@@ -36,7 +36,7 @@ class BaseUser(AbstractBaseUser, PermissionsMixin):
     f_name = models.CharField(max_length=50, verbose_name='First Name')
     m_name = models.CharField(max_length=50, null=True, blank=True, verbose_name='Middle Name')
     l_name = models.CharField(max_length=50, null=True, blank=True, verbose_name='Last Name')
-    phone = models.CharField(max_length=15, verbose_name='Phone Number')
+    phone = models.CharField(max_length=20, verbose_name='Phone Number')
     role = models.CharField(max_length=10, choices=[
         ('STAFF', 'Staff'),
         ('CLIENT', 'Client'),
@@ -72,7 +72,7 @@ class ClientManager(UserManager):
 # CLIENT CLASS
 class Client(BaseUser):
     fabricator = models.ForeignKey('fabricator.Fabricator', on_delete=models.CASCADE, verbose_name='Client Company/Fabricator')
-    alt_phone = models.CharField(max_length=15, null=True, blank=True, verbose_name='Alternate Phone')
+    alt_phone = models.CharField(max_length=20, null=True, blank=True, verbose_name='Alternate Phone')
     designation = models.CharField(max_length=50, verbose_name='Client Designation')
     address = models.CharField(max_length=150, null=True, blank=True, verbose_name='User Address')
     city = models.CharField(max_length=50, null=True, blank=True, verbose_name='User City')

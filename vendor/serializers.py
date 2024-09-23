@@ -6,6 +6,12 @@ from vendor.models import (
 )
 from core.models import VendorUser
 
+class VendorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Vendor
+        fields = '__all__'
+        read_only_fields = ['id']
+
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
@@ -37,6 +43,14 @@ class VendorUserSerializer(serializers.ModelSerializer):
                 'read_only':True
             }
         }
+
+    def to_representation(self, instance):
+        response = super().to_representation(instance)
+        try:
+            response['vendor'] = VendorSerializer(Vendor.objects.get(pk=response.get('vendor', None))).data
+        except Exception as e:
+            print(f"Error: {e}")
+        return response
 
 class VendorDesignSerializer(serializers.ModelSerializer):
     class Meta:

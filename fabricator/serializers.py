@@ -12,6 +12,12 @@ class UserSerializer(serializers.ModelSerializer):
         model = get_user_model()
         fields = ['f_name', 'm_name', 'l_name', 'username', 'email', 'phone', 'role']
 
+class FabricatorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Fabricator
+        fields = '__all__'
+        read_only_fields = ['id']
+
 class ClientSerializer(serializers.ModelSerializer):
     class Meta:
         model = Client
@@ -39,6 +45,14 @@ class ClientSerializer(serializers.ModelSerializer):
             }
         }
 
+    def to_representation(self, instance):
+        response = super().to_representation(instance)
+        try:
+            response['fabricator'] = FabricatorSerializer(Fabricator.objects.get(pk=response.get('fabricator', None))).data
+        except Exception as e:
+            print(f"Error: {e}")
+        return response
+
 class StandardDesignSerializer(serializers.ModelSerializer):
     class Meta:
         model = StandardDesign
@@ -50,9 +64,3 @@ class StandardDesignSerializer(serializers.ModelSerializer):
         if response['added_by'] is not None:
             response['added_by'] = UserSerializer(get_user_model().objects.get(pk=response['added_by'])).data
         return response
-
-class FabricatorSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Fabricator
-        fields = '__all__'
-        read_only_fields = ['id']
