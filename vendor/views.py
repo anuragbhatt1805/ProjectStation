@@ -72,6 +72,6 @@ class VendorModelViewSet(viewsets.ModelViewSet):
         else:
             serializer = VendorUserSerializer(data=request.data)
             if serializer.is_valid():
-                user = vendor.add_user(**request.data)
+                user = vendor.add_user(**serializer.data)
                 return Response(VendorUserSerializer(user).data, status=status.HTTP_201_CREATED)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
