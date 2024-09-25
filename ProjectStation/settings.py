@@ -32,7 +32,7 @@ SECRET_KEY = 'django-insecure-e(5=o==-*yp0cquiub6up#0r(=5ec0jsn*!+_278t_m^5@r97g
 DEBUG = getenv('DEVELOPMENT')
 
 ALLOWED_HOSTS = ['*']
-CSRF_TRUSTED_ORIGINS = ['https://*', 'http://*']
+CSRF_TRUSTED_ORIGINS = ['https://projectstation.onrender.com', 'http://localhost:5173']
 
 # Application definition
 
