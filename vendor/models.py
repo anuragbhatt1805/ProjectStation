@@ -63,7 +63,8 @@ class Vendor(models.Model):
     def add_user(self, **user):
         try:
             user['vendor'] = self
-            vendor = VendorUser.objects.create_user(*user)
+            print(user)
+            vendor = VendorUser.objects.create_user(**user)
             return vendor
         except Exception as e:
             print(f"Error creating contact: {e}")
